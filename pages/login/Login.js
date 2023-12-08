@@ -3,11 +3,13 @@ import React, { useState } from "react"
 import { View, Image, TextInput, StyleSheet } from "react-native"
 import { CustomButton } from "../../components/CustomButton"
 import { Snackbar } from "../../components/Snackbar"
-import { isEmpty } from "../../utils"
+import { isEmpty, isLoggedIn } from "../../utils"
 import { LoginService } from "../../services/LoginService"
 import { COLOR } from "../../constants"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Home } from "../home/Home"
 
-export const Login = () => {
+export const Login = ({ navigation }) => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -38,7 +40,11 @@ export const Login = () => {
                     text: "User not found",
                     show: !snackbarDetail.show,
                 })
-                //   navigation.navigate('Home');
+            } else if (data.data.status == "success") {
+                // Set connected value to true in AsyncStorage
+                await AsyncStorage.setItem("connected", "true")
+
+                navigation.navigate("Home")
             } else {
                 setIsLoading(false)
 
@@ -47,6 +53,11 @@ export const Login = () => {
             }
         }
     }
+    
+    if(isLoggedIn()){
+        return <Home />
+    }
+    
 
     return (
         <View style={styles.container}>
@@ -86,14 +97,14 @@ export const Login = () => {
                             show: !snackbarDetail.show,
                         })
                     }}
-                    duration={3000} 
-                    position="bottom" 
+                    duration={3000}
+                    position="bottom"
                     backgroundColor={snackbarDetail.color}
                     textColor="white"
-                    actionTextColor="white" 
-                    containerStyle={{ marginHorizontal: 12 }} 
-                    messageStyle={{}} 
-                    actionTextStyle={{}} 
+                    actionTextColor="white"
+                    containerStyle={{ marginHorizontal: 12 }}
+                    messageStyle={{}}
+                    actionTextStyle={{}}
                 />
             )}
         </View>

@@ -6,17 +6,24 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Home } from "./pages/home/Home"
 
+const Stack = createNativeStackNavigator()
+
 export default function App() {
     const queryClient = new QueryClient()
-    const Stack = createNativeStackNavigator();
 
     return (
         <QueryClientProvider client={queryClient}>
             <NavigationContainer>
                 <View style={styles.container}>
                     <StatusBar style="auto" />
-                    <Stack.Navigator initialRouteName="Login">
-                        <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
+                    <Stack.Navigator
+                        initialRouteName={"Login"}
+                    >
+                        <Stack.Screen
+                            name="Login"
+                            component={Login}
+                            options={{ headerShown: false }}
+                        />
                         <Stack.Screen name="Home" component={Home} />
                     </Stack.Navigator>
                 </View>
