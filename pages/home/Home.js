@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import {
+    Image,
     KeyboardAvoidingView,
     StyleSheet,
     Text,
@@ -11,9 +12,16 @@ import { isLoggedIn } from "../../utils"
 import { Login } from "../login/Login"
 import { JobItem } from "./components/JobItem"
 import { COLOR } from "../../constants"
+import Logout from "../../assets/Icons/Logout.svg"
 
 export const Home = () => {
+    const [text, setText] = useState("")
     const [jobs, setJobs] = useState(["Task 1", "Task 2"])
+
+    const handleAdd = () => {
+        setJobs([...jobs, text])
+        setText("")
+    }
 
     if (!isLoggedIn()) {
         return <Login />
@@ -21,19 +29,27 @@ export const Home = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Home</Text>
+            <View>
+                <Text style={styles.title}>Home</Text>
+                <Logout />
+            </View>
             <TextInput style={styles.search} placeholder="Search for jobs" />
 
             {jobs.map((item, index) => {
-                return <JobItem key={index} text={`Job ${index + 1}`} />
+                return <JobItem key={index} text={item} />
             })}
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.writeJob}
             >
-                <TextInput style={styles.textAdd} placeholder="Add a job" />
-                <TouchableOpacity onPress={() => {}}>
+                <TextInput
+                    style={styles.textAdd}
+                    placeholder="Add a job"
+                    value={text}
+                    onChangeText={(text) => setText(text)}
+                />
+                <TouchableOpacity onPress={handleAdd}>
                     <View style={styles.addWrapper}>
                         <Text style={styles.addText}> + </Text>
                     </View>
