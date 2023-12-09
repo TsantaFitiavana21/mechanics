@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Image,
     KeyboardAvoidingView,
@@ -13,10 +13,12 @@ import { COLOR } from "../../constants"
 import Logout from "../../assets/Icons/Logout.svg"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Snackbar } from "../../components/Snackbar"
+import { JobService } from "../../services/JobService"
 
 export const Home = ({ navigation }) => {
     const [text, setText] = useState("")
-    const [jobs, setJobs] = useState(["Task 1", "Task 2"])
+    const [jobs, setJobs] = useState([])
+    const [userConnected, setUserConnected] = useState()
     const [showSnackbar, setShowSnackbar] = useState(false)
 
     const handleAdd = () => {
@@ -30,6 +32,20 @@ export const Home = ({ navigation }) => {
         navigation.navigate("Login")
     }
 
+    useEffect(() => {
+        AsyncStorage.getItem('username').then((data) => {
+            setUserConnected(data)
+        })
+    }, [])
+
+    useEffect(() => {
+        if(userConnected) {
+            JobService.getJobs(userConnected).then(data => {
+                setJobs(data.data.jobs)
+            })
+        }
+    }, [userConnected])
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -41,7 +57,7 @@ export const Home = ({ navigation }) => {
             <TextInput style={styles.search} placeholder="Search for jobs" />
 
             {jobs.map((item, index) => {
-                return <JobItem key={index} text={item} />
+                return <JobItem key={index} text={item.job_description} />
             })}
 
             <KeyboardAvoidingView
