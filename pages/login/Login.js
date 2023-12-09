@@ -43,13 +43,13 @@ export const Login = ({ navigation }) => {
             } else if (data.data.status == "success") {
                 // Set connected value to true in AsyncStorage
                 await AsyncStorage.setItem("connected", "true")
+                await AsyncStorage.setItem("username", data.data.username)
 
                 navigation.navigate("Home")
             } else {
                 setIsLoading(false)
 
                 console.log("Login failed. Error:", data.error)
-                // You can add an error message or other feedback to the user
             }
         }
     }    
