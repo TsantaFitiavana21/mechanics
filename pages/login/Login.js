@@ -54,9 +54,9 @@ export const Login = ({ navigation }) => {
         }
     }
     
-    if(isLoggedIn()){
-        return <Home />
-    }
+    // if(isLoggedIn()){
+    //     return <Home />
+    // }
     
 
     return (

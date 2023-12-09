@@ -5,6 +5,7 @@ import { QueryClientProvider, QueryClient } from "react-query"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Home } from "./pages/home/Home"
+import { isLoggedIn } from "./utils"
 
 const Stack = createNativeStackNavigator()
 
@@ -17,14 +18,18 @@ export default function App() {
                 <View style={styles.container}>
                     <StatusBar style="auto" />
                     <Stack.Navigator
-                        initialRouteName={"Login"}
+                        initialRouteName={!isLoggedIn() ? "Login" : "Home"}
                     >
                         <Stack.Screen
                             name="Login"
                             component={Login}
                             options={{ headerShown: false }}
                         />
-                        <Stack.Screen name="Home" component={Home} />
+                        <Stack.Screen
+                            name="Home"
+                            component={Home}
+                            options={{ headerShown: false }}
+                        />
                     </Stack.Navigator>
                 </View>
             </NavigationContainer>

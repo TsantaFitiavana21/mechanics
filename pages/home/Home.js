@@ -13,25 +13,36 @@ import { Login } from "../login/Login"
 import { JobItem } from "./components/JobItem"
 import { COLOR } from "../../constants"
 import Logout from "../../assets/Icons/Logout.svg"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Snackbar } from "../../components/Snackbar"
 
-export const Home = () => {
+export const Home = ({ navigation }) => {
     const [text, setText] = useState("")
     const [jobs, setJobs] = useState(["Task 1", "Task 2"])
+    const [showSnackbar, setShowSnackbar] = useState(false)
 
     const handleAdd = () => {
         setJobs([...jobs, text])
         setText("")
     }
 
-    if (!isLoggedIn()) {
-        return <Login />
+    const handleLogout = () => {
+        AsyncStorage.removeItem("connected")
+        setShowSnackbar(!showSnackbar)
+        navigation.navigate("Login")
     }
+
+    // if (!isLoggedIn()) {
+    //     return <Login />
+    // }
 
     return (
         <View style={styles.container}>
-            <View>
+            <View style={styles.headerContainer}>
                 <Text style={styles.title}>Home</Text>
-                <Logout />
+                <TouchableOpacity onPress={handleLogout}>
+                    <Logout width={30} height={30} />
+                </TouchableOpacity>
             </View>
             <TextInput style={styles.search} placeholder="Search for jobs" />
 
@@ -55,6 +66,25 @@ export const Home = () => {
                     </View>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
+
+            {showSnackbar && (
+                <Snackbar
+                    message={"Logout successfully"}
+                    actionText="Dismiss"
+                    onActionPress={() => {
+                        // Implement the action logic here.
+                        setShowSnackbar(!showSnackbar)
+                    }}
+                    duration={3000}
+                    position="bottom"
+                    backgroundColor={COLOR.success}
+                    textColor="white"
+                    actionTextColor="white"
+                    containerStyle={{ marginHorizontal: 12 }}
+                    messageStyle={{}}
+                    actionTextStyle={{}}
+                />
+            )}
         </View>
     )
 }
@@ -65,6 +95,11 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 50,
         paddingHorizontal: 20,
+    },
+    headerContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     title: {
         fontSize: 34,
