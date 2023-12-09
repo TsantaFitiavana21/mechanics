@@ -52,12 +52,7 @@ export const Login = ({ navigation }) => {
                 // You can add an error message or other feedback to the user
             }
         }
-    }
-    
-    // if(isLoggedIn()){
-    //     return <Home />
-    // }
-    
+    }    
 
     return (
         <View style={styles.container}>

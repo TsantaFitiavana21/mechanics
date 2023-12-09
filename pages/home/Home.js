@@ -8,8 +8,6 @@ import {
     TouchableOpacity,
     View,
 } from "react-native"
-import { isLoggedIn } from "../../utils"
-import { Login } from "../login/Login"
 import { JobItem } from "./components/JobItem"
 import { COLOR } from "../../constants"
 import Logout from "../../assets/Icons/Logout.svg"
@@ -31,10 +29,6 @@ export const Home = ({ navigation }) => {
         setShowSnackbar(!showSnackbar)
         navigation.navigate("Login")
     }
-
-    // if (!isLoggedIn()) {
-    //     return <Login />
-    // }
 
     return (
         <View style={styles.container}>

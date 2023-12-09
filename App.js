@@ -25,11 +25,13 @@ export default function App() {
                             component={Login}
                             options={{ headerShown: false }}
                         />
-                        <Stack.Screen
-                            name="Home"
-                            component={Home}
-                            options={{ headerShown: false }}
-                        />
+                        {isLoggedIn() && (
+                            <Stack.Screen
+                                name="Home"
+                                component={Home}
+                                options={{ headerShown: false }}
+                            />
+                        )}
                     </Stack.Navigator>
                 </View>
             </NavigationContainer>
