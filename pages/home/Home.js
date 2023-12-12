@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import {
-    Image,
     KeyboardAvoidingView,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -14,12 +14,15 @@ import Logout from "../../assets/Icons/Logout.svg"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Snackbar } from "../../components/Snackbar"
 import { JobService } from "../../services/JobService"
+import { useStyles } from "./styles/useStyles"
 
 export const Home = ({ navigation }) => {
     const [text, setText] = useState("")
     const [jobs, setJobs] = useState([])
     const [userConnected, setUserConnected] = useState()
     const [showSnackbar, setShowSnackbar] = useState(false)
+
+    const styles = useStyles()
 
     const handleAdd = () => {
         setJobs([...jobs, text])
@@ -33,14 +36,14 @@ export const Home = ({ navigation }) => {
     }
 
     useEffect(() => {
-        AsyncStorage.getItem('username').then((data) => {
+        AsyncStorage.getItem("username").then((data) => {
             setUserConnected(data)
         })
     }, [])
 
     useEffect(() => {
-        if(userConnected) {
-            JobService.getJobs(userConnected).then(data => {
+        if (userConnected) {
+            JobService.getJobs(userConnected).then((data) => {
                 setJobs(data.data.jobs)
             })
         }
@@ -49,27 +52,30 @@ export const Home = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text style={styles.title}>Home</Text>
+                <Text style={styles.title}>Job List</Text>
                 <TouchableOpacity onPress={handleLogout}>
                     <Logout width={30} height={30} />
                 </TouchableOpacity>
             </View>
             <TextInput style={styles.search} placeholder="Search for jobs" />
 
-            {jobs.map((item, index) => {
-                return <JobItem key={index} text={item.job_description} />
-            })}
+            <ScrollView showsVerticalScrollIndicator={false}>
+                {jobs.length > 0 &&
+                    jobs.map((item, index) => {
+                        return <JobItem key={index} job={item} />
+                    })}
+            </ScrollView>
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.writeJob}
             >
-                <TextInput
+                {/* <TextInput
                     style={styles.textAdd}
                     placeholder="Add a job"
                     value={text}
                     onChangeText={(text) => setText(text)}
-                />
+                /> */}
                 <TouchableOpacity onPress={handleAdd}>
                     <View style={styles.addWrapper}>
                         <Text style={styles.addText}> + </Text>
@@ -99,59 +105,3 @@ export const Home = ({ navigation }) => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "white",
-        flex: 1,
-        paddingTop: 50,
-        paddingHorizontal: 20,
-    },
-    headerContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    title: {
-        fontSize: 34,
-        fontWeight: "bold",
-    },
-    search: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginVertical: 20,
-        borderWidth: 1,
-        borderRadius: 6,
-    },
-    writeJob: {
-        position: "absolute",
-        bottom: 60,
-        width: "110%",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-    },
-    textAdd: {
-        paddingVertical: 15,
-        width: 250,
-        paddingHorizontal: 15,
-        backgroundColor: "white",
-        borderRadius: 8,
-        fontSize: 16,
-
-        elevation: 3, // Adjust the elevation based on your preference
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
-    addWrapper: {
-        width: 55,
-        height: 55,
-        borderRadius: 8,
-        justifyContent: "center",
-        alignItems: "center",
-
-        backgroundColor: COLOR.neutral,
-    },
-    addText: { color: "white", fontSize: 28 },
-})
