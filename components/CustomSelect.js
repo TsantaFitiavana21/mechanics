@@ -5,7 +5,6 @@ import { Dropdown } from "react-native-element-dropdown"
 export const CustomSelect = ({
     onChange,
     items,
-    value,
     style,
     isSearch,
     readOnly,
@@ -13,6 +12,7 @@ export const CustomSelect = ({
     valueField = "value",
 }) => {
     const [isFocus, setIsFocus] = useState(false)
+    const [value, setValue] = useState()
 
     return (
         <Dropdown
@@ -34,7 +34,8 @@ export const CustomSelect = ({
             value={readOnly ? items[0] : value}
             onChange={(value) => {
                 setIsFocus(false)
-                onChange(value)
+                setValue(value)
+                onChange(value.value)
             }}
         />
     )
