@@ -28,7 +28,7 @@ export const CustomSelect = ({
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             labelField={labelField}
-            valueField={labelField}
+            valueField={valueField}
             placeholder={!isFocus ? "Select item" : "..."}
             searchPlaceholder="Search..."
             value={readOnly ? items[0] : value}
