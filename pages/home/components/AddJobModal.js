@@ -13,9 +13,12 @@ import { COLOR } from "../../../constants"
 import { BusService } from "../../../services/BusService"
 import { useEffect, useState } from "react"
 import { useData } from "../hooks/useData"
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { CustomDatePicker } from "../../../components/CustomDatePicker"
 
 export const AddJobModal = ({ isModalVisible, toggleModal }) => {
     const [buses, setBuses] = useState([])
+    const [date, setDate] = useState(new Date())
 
     const styles = useModalAddStyle()
     const busService = new BusService()
@@ -119,10 +122,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
 
                         <View style={styles.textInputContainer}>
                             <Text style={styles.label}>Due date</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder="Pick a date"
-                            />
+                            <CustomDatePicker />
                         </View>
 
                         <View style={styles.textInputContainer}>
