@@ -12,23 +12,20 @@ import { useModalAddStyle } from "../styles/useModalAddStyle"
 import { COLOR } from "../../../constants"
 import { BusService } from "../../../services/BusService"
 import { useEffect, useState } from "react"
+import { useData } from "../hooks/useData"
 
 export const AddJobModal = ({ isModalVisible, toggleModal }) => {
     const [buses, setBuses] = useState([])
 
     const styles = useModalAddStyle()
     const busService = new BusService()
-
-    const data = [
-        { label: "Item 1", value: "1" },
-        { label: "Item 2", value: "2" },
-        { label: "Item 3", value: "3" },
-        { label: "Item 4", value: "4" },
-        { label: "Item 5", value: "5" },
-        { label: "Item 6", value: "6" },
-        { label: "Item 7", value: "7" },
-        { label: "Item 8", value: "8" },
-    ]
+    const {
+        job_priorities,
+        job_schedules,
+        job_status,
+        job_types,
+        job_categories,
+    } = useData()
 
     useEffect(() => {
         busService.getBus().then((data) => setBuses(data.data))
@@ -62,7 +59,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                         <View style={styles.dropdownContainer}>
                             <Text style={styles.label}>Type</Text>
                             <CustomSelect
-                                items={data}
+                                items={job_types}
                                 style={styles.dropdown}
                             />
                         </View>
@@ -71,7 +68,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <Text style={styles.label}>Status</Text>
                             <CustomSelect
                                 readOnly
-                                items={[{ label: "Pending", value: "pending" }]}
+                                items={job_status}
                                 style={styles.dropdown}
                             />
                         </View>
@@ -91,7 +88,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                         <View style={styles.dropdownContainer}>
                             <Text style={styles.label}>Category</Text>
                             <CustomSelect
-                                items={data}
+                                items={job_categories}
                                 style={styles.dropdown}
                             />
                         </View>
@@ -107,7 +104,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                         <View style={styles.dropdownContainer}>
                             <Text style={styles.label}>Schedule</Text>
                             <CustomSelect
-                                items={data}
+                                items={job_schedules}
                                 style={styles.dropdown}
                             />
                         </View>
@@ -115,7 +112,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                         <View style={styles.dropdownContainer}>
                             <Text style={styles.label}>Priority</Text>
                             <CustomSelect
-                                items={data}
+                                items={job_priorities}
                                 style={styles.dropdown}
                             />
                         </View>
@@ -124,7 +121,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <Text style={styles.label}>Due date</Text>
                             <TextInput
                                 style={styles.textInput}
-                                placeholder="Add a vendor"
+                                placeholder="Pick a date"
                             />
                         </View>
 
