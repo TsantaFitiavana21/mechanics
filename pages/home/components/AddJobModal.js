@@ -13,15 +13,11 @@ import { COLOR } from "../../../constants"
 import { BusService } from "../../../services/BusService"
 import { useEffect, useState } from "react"
 import { useData } from "../hooks/useData"
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { CustomDatePicker } from "../../../components/CustomDatePicker"
 
 export const AddJobModal = ({ isModalVisible, toggleModal }) => {
     const [buses, setBuses] = useState([])
-    const [date, setDate] = useState(new Date())
 
-    const styles = useModalAddStyle()
-    const busService = new BusService()
     const {
         job_priorities,
         job_schedules,
@@ -29,6 +25,35 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
         job_types,
         job_categories,
     } = useData()
+
+    const [job, setJob] = useState({
+        description: "",
+        type: "",
+        status: job_status[0],
+        bus_number: "",
+        category: "",
+        vendors: "",
+        schedule: "",
+        priority: "",
+        due_date: "",
+        location: "",
+    })
+
+    const styles = useModalAddStyle()
+    const busService = new BusService()
+
+    
+
+    const handleInputChange = (inputName, text) => {
+        setJob((prevValues) => ({
+            ...prevValues,
+            [inputName]: text,
+        }))
+    }
+
+    const handleSubmit = () => {
+        console.log(job)
+    }
 
     useEffect(() => {
         busService.getBus().then((data) => setBuses(data.data))
@@ -56,6 +81,9 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <TextInput
                                 style={styles.textInput}
                                 placeholder="Add a description"
+                                onChangeText={(text) =>
+                                    handleInputChange("description", text)
+                                }
                             />
                         </View>
 
@@ -64,6 +92,9 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <CustomSelect
                                 items={job_types}
                                 style={styles.dropdown}
+                                onChange={(value) =>
+                                    handleInputChange("type", value)
+                                }
                             />
                         </View>
 
@@ -73,6 +104,9 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                                 readOnly
                                 items={job_status}
                                 style={styles.dropdown}
+                                onChange={(value) =>
+                                    handleInputChange("status", value)
+                                }
                             />
                         </View>
 
@@ -83,7 +117,10 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                                     items={buses}
                                     style={styles.dropdown}
                                     labelField="number"
-                                    value="bus_id"
+                                    valueField="bus_id"
+                                    onChange={(value) =>
+                                        handleInputChange("bus_number", value)
+                                    }
                                 />
                             )}
                         </View>
@@ -93,6 +130,9 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <CustomSelect
                                 items={job_categories}
                                 style={styles.dropdown}
+                                onChange={(value) =>
+                                    handleInputChange("category", value)
+                                }
                             />
                         </View>
 
@@ -101,6 +141,9 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <TextInput
                                 style={styles.textInput}
                                 placeholder="Add a vendor"
+                                onChangeText={(text) =>
+                                    handleInputChange("vendors", text)
+                                }
                             />
                         </View>
 
@@ -109,6 +152,9 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <CustomSelect
                                 items={job_schedules}
                                 style={styles.dropdown}
+                                onChange={(value) =>
+                                    handleInputChange("schedule", value)
+                                }
                             />
                         </View>
 
@@ -117,12 +163,19 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <CustomSelect
                                 items={job_priorities}
                                 style={styles.dropdown}
+                                onChange={(value) =>
+                                    handleInputChange("priority", value)
+                                }
                             />
                         </View>
 
                         <View style={styles.textInputContainer}>
                             <Text style={styles.label}>Due date</Text>
-                            <CustomDatePicker />
+                            <CustomDatePicker
+                                onChange={(date) =>
+                                    handleInputChange("due_date", date)
+                                }
+                            />
                         </View>
 
                         <View style={styles.textInputContainer}>
@@ -130,6 +183,7 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                             <TextInput
                                 style={styles.textInput}
                                 placeholder="Add a location"
+                                onChangeText={(text) => handleInputChange('location', text)}
                             />
                         </View>
 
@@ -139,7 +193,10 @@ export const AddJobModal = ({ isModalVisible, toggleModal }) => {
                                 title={"Cancel"}
                                 onPress={toggleModal}
                             />
-                            <CustomButton title={"Submit"} />
+                            <CustomButton
+                                title={"Submit"}
+                                onPress={handleSubmit}
+                            />
                         </View>
                     </ScrollView>
                 </View>
