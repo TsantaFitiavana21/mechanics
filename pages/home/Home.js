@@ -2,31 +2,30 @@ import React, { useEffect, useState } from "react"
 import {
     KeyboardAvoidingView,
     ScrollView,
-    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
     View,
 } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { JobItem } from "./components/JobItem"
 import { COLOR } from "../../constants"
 import Logout from "../../assets/Icons/Logout.svg"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Snackbar } from "../../components/Snackbar"
 import { JobService } from "../../services/JobService"
 import { useStyles } from "./styles/useStyles"
+import { AddJobModal } from "./components/AddJobModal"
 
 export const Home = ({ navigation }) => {
-    const [text, setText] = useState("")
     const [jobs, setJobs] = useState([])
     const [userConnected, setUserConnected] = useState()
     const [showSnackbar, setShowSnackbar] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
 
     const styles = useStyles()
 
-    const handleAdd = () => {
-        setJobs([...jobs, text])
-        setText("")
+    const toggleModal = () => {
+        setIsModalVisible(!isModalVisible)
     }
 
     const handleLogout = () => {
@@ -70,18 +69,14 @@ export const Home = ({ navigation }) => {
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.writeJob}
             >
-                {/* <TextInput
-                    style={styles.textAdd}
-                    placeholder="Add a job"
-                    value={text}
-                    onChangeText={(text) => setText(text)}
-                /> */}
-                <TouchableOpacity onPress={handleAdd}>
+                <TouchableOpacity onPress={toggleModal}>
                     <View style={styles.addWrapper}>
                         <Text style={styles.addText}> + </Text>
                     </View>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
+
+            <AddJobModal isModalVisible={isModalVisible} toggleModal={toggleModal} />
 
             {showSnackbar && (
                 <Snackbar
@@ -104,4 +99,3 @@ export const Home = ({ navigation }) => {
         </View>
     )
 }
-

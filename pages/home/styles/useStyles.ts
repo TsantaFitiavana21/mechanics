@@ -41,7 +41,7 @@ export const useStyles = () => {
             backgroundColor: "white",
             borderRadius: 8,
             fontSize: 16,
-    
+
             elevation: 3, // Adjust the elevation based on your preference
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
@@ -54,7 +54,7 @@ export const useStyles = () => {
             borderRadius: 8,
             justifyContent: "center",
             alignItems: "center",
-    
+
             backgroundColor: COLOR.neutral,
         },
         addText: { color: "white", fontSize: 28 },
